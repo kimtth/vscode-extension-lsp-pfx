@@ -1,0 +1,132 @@
+{
+  "scopeName": "source.powerfxalpha",
+  "name": "PowerFxAlpha",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#literals"
+    },
+    {
+      "include": "#identifiers"
+    },
+    {
+      "include": "#expressions"
+    },
+    {
+      "include": "#functions" 
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.powerfxalpha",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.powerfxalpha",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.powerfxalpha",
+          "match": "\\b(Import|Define|Parent|Self|ThisItem|ThisRecord|out)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.powerfxalpha",
+          "match": "(\\+|\\-|\\*|\\/|\\^|%|&&|\\|\\||!|=|<|<=|>|>=|<>|in|exactin|\\.|;|,|\\(|\\)|\\{|\\}|\\[|\\]|@|:)"
+        }
+      ]
+    },
+    "literals": {
+      "patterns": [
+        {
+          "name": "constant.numeric.powerfxalpha",
+          "match": "\\b\\d+(\\.\\d+)?([eE][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "string.quoted.double.powerfxalpha",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.powerfxalpha",
+              "match": "\"\""
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.powerfxalpha",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.powerfxalpha",
+              "match": "''"
+            }
+          ]
+        },
+        {
+          "name": "constant.language.boolean.powerfxalpha",
+          "match": "\\b(true|false)\\b"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.powerfxalpha",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "expressions": {
+      "patterns": [
+        {
+          "name": "meta.expression.powerfxalpha",
+          "begin": "(?<=\\=)\\s*",
+          "end": "(?=;)",
+          "patterns": [
+            {
+              "include": "#operators"
+            },
+            {
+              "include": "#identifiers"
+            },
+            {
+              "include": "#literals"
+            }
+          ]
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.powerfxalpha",
+          "match": "\\b(Set|Print|OtherBuiltInFunction1)\\b" 
+        },
+        {
+          "name": "variable.function.powerfxalpha",
+          "match": "/\\b\\w+(?=\\()/g"
+        }
+      ]
+    }
+  }
+}

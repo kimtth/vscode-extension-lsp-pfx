@@ -1,0 +1,30 @@
+// Import statement
+Import "test.pfx";
+
+// Function definitions
+Define Multiply(Number1, Number2, Result) {
+    Result = Number1 * Number2;
+}
+
+Define Divide(Number1, Number2, Result) {
+    Result = Multiply(Number1, Number2, Result);
+    Result = Result / Number2;
+}
+
+Define StrConcat(Str1, Str2, Result) {
+    Result = Str1 + Str2;
+}
+
+// Expressions
+Set(Result, 0);               // This line sets Result to 0
+Set(Number1, 10);            // This line sets Number1 to 10
+Set(Number2, 20);            // This line sets Number2 to 20
+Multiply(Number1, Number2, Result); // Multiply Number1 and Number2, store in Result
+
+Set(Result, 0);               // Reset Result to 0 before Divide
+Divide(Number1, Number2, Result); // Divide using Number1 and Number2
+
+Set(Result, "");              // Set Result to an empty string
+Set(Str1, "A");              // Set Str1 to "A"
+Set(Str2, "B");              // Set Str2 to "B"
+StrConcat(Str1, Str2, Result); // Concatenate Str1 and Str2, store in Result

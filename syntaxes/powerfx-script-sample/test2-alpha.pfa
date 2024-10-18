@@ -1,0 +1,66 @@
+Import "library.pfx";  
+  
+// Function to add two numbers  
+Define AddNumbers(a, b) {  
+    Result = a + b;  
+}  
+  
+// Call the AddNumbers function  
+AddNumbers(5, 10);  
+  
+// Function to create a record with name and age  
+Define CreateRecord(name, age) {  
+    RecordName = name;  
+    RecordAge = age;  
+    // Assuming the grammar supports individual field assignments  
+}  
+  
+// Function with nested calls and binary operations  
+Define ComplexCalculation(x, y) {  
+    TempResult = Multiply(x, y);  
+    FinalResult = TempResult + 100;  
+}  
+  
+// Function to check eligibility based on age  
+Define CheckEligibility(age) {  
+    IsEligible = age >= 18;  
+}  
+  
+// Function to print a record  
+Define PrintRecord(recordName, recordAge) {  
+    Print("Name: ");
+    Print(recordName);  
+    Print(recordAge);  
+}  
+  
+// Call the PrintRecord function with an inline record  
+PrintRecord("Alice", 30);  
+  
+// Function to get the parent name using context keyword  
+Define GetParentName() {  
+    ParentName = Parent.Name;  
+}  
+  
+// Function to calculate the area of a rectangle  
+Define CalculateArea(length, width) {  
+    Area = length * width;  
+}  
+  
+// Function to generate an inline table  
+Define GenerateTable() {  
+    // Assuming the grammar supports individual element assignments for arrays  
+    TableElement1 = 1;  
+    TableElement2 = 2;  
+    TableElement3 = 3;  
+    TableElement4 = 4;  
+    TableElement5 = 5;  
+}  
+
+AddNumbers(5, 10);  
+CreateRecord("John Doe", 25);  
+ComplexCalculation(3, 4);  
+CheckEligibility(20);  
+PrintRecord("Alice", 30);  
+GetParentName(); 
+CalculateArea(5, 10);  
+GenerateTable();  

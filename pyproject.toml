@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "vscode-extension-auto-completion-lsp"
+version = "0.1.0"
+description = ""
+authors = ["kimtth <github.com/kimtth>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+antlr4-python3-runtime = "^4.13.2"
+pygls = "2.0.0a1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
