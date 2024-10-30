@@ -23,7 +23,7 @@ class PowerFXAlphaLanguageServer(LanguageServer):
                 func_nodes = []
                 for node in traverse_tree(tree, func_nodes):
                     if node:
-                        print(node.getText())
+                        # print(node.getText())
                         function_name = node.getText()
                         start_char_pos = node.start.start
                         end_char_pos = node.start.stop
@@ -93,12 +93,10 @@ def hover(ls: PowerFXAlphaLanguageServer, params: types.HoverParams):
     )
 
 
-# Custom command
-CHAT_MESSAGE = "chat/message"
+# Custom command - Simple notification
+CHAT_REQUEST = "chat/request"
 CHAT_RESPONSE = "chat/response"
-
-
-@server.feature(CHAT_MESSAGE)
+@server.feature(CHAT_REQUEST)
 async def handle_chat_message(ls: PowerFXAlphaLanguageServer, params):
     """
     Handle incoming chat messages from the client.
@@ -107,6 +105,22 @@ async def handle_chat_message(ls: PowerFXAlphaLanguageServer, params):
         message = params.message
         # Optionally, send a response or notification to the client
         ls.protocol.notify(CHAT_RESPONSE, {"message": f"Message received! {message}"})
+
+
+# Custom command - Chat
+CAT_CHAT_REQUEST = "catChat/request"
+@server.feature(CAT_CHAT_REQUEST)
+async def handle_cat_chat_message(ls: PowerFXAlphaLanguageServer, params):
+    """
+    Handle incoming chat messages from the client.
+    """
+    if hasattr(params, "messages"):
+        messages = params.messages
+        # TODO - OpenAI call
+        last_message = messages[-1]
+        response = {'text': [last_message, 'meow']}
+        return response
+
 
 
 @server.feature(types.TEXT_DOCUMENT_DID_OPEN)
@@ -122,7 +136,7 @@ def did_change(ls: PowerFXAlphaLanguageServer, params: types.DidOpenTextDocument
     doc = ls.workspace.get_text_document(params.text_document.uri)
     ls.parse(doc)
     time.sleep(
-        1
+        2
     )  # Sleep for a second to prevent invoking the parse function multiple times.
 
 

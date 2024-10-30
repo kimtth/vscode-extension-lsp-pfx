@@ -10,12 +10,12 @@
 
 ## Visual Code extension overview
 
-- VS Code <-> Type script: Extension & LSP Client (node) <-- LSP -- > Python: LSP Server (pygls) <-> Parser
+- VS Code <-> Type script: Extension & LSP Client (nodejs) <-- LSP -- > Python: LSP Server (pygls) <-> Parser
 
 ```mermaid
 sequenceDiagram
     participant VSCode as VS Code
-    participant TS as TypeScript: <br/> Extension & LSP Client (node)
+    participant TS as TypeScript: <br/> Extension & LSP Client (nodejs)
     participant Python as Python: <br/> LSP Server <br/> (pygls)
     participant Parser as Parser
 
@@ -31,7 +31,7 @@ sequenceDiagram
 ### Example Implementations:
 
 - [Extension & LSP Client - ANSI C Example](https://github.com/lextm/vscode-ansic): The `src\languageServer` directory in the repository is actually an LSP client.
-- [Language Server (LSP Backend & Parser) - ANSI C Example](https://github.com/lextm/ansi-c-antlr): The VS Code extension officially supports the Node SDK for the LSP server. However, the repository implements the LSP server using C#. The official documentation for the VS Code extension states that `The language server can be implemented in any language, as long as it can communicate with the language client using the Language Server Protocol.`
+- [Language Server (LSP Backend & Parser) - ANSI C Example](https://github.com/lextm/ansi-c-antlr): The VS Code extension officially supports the Node SDK for the LSP server. However, this repository implements the LSP server using C#. The official documentation for the VS Code extension states that `The language server can be implemented in any language, as long as it can communicate with the language client using the Language Server Protocol.`
 - [Video Overview on YouTube](https://youtu.be/H0p7tcUuJm0?si=QTLL3FOubsJoxEW_)
 
 ## Language Definition & Configuration
@@ -73,7 +73,8 @@ https://github.com/user-attachments/assets/e7dc6464-c559-4d91-8498-02e11ea42cd9
 2. Rename Function: Rename function's name in the code context.  
 3. Custom Notification: Create a command for notifications through user input from client-server communication.  
 4. Client Notification: Enable the client to pop up a hello-world notification by command.  
-5. Syntax Highlighting: Implement syntax highlighting.  
+5. Syntax Highlighting: Implement syntax highlighting.
+6. Chat: A chat UI implementation that displays responses from the server.
 
 ## References
 

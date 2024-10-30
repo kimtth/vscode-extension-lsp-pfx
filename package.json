@@ -33,15 +33,34 @@
       }
     ],
     "commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "PowerFxAlpha: Hello World"
-			},
+      {
+        "command": "extension.helloWorld",
+        "title": "PowerFxAlpha: Hello World"
+      },
       {
         "command": "extension.sendChatMessage",
         "title": "PowerFxAlpha: sendChatMessage"
       }
-		]
+    ],
+    "chatParticipants": [
+      {
+        "id": "chat-ext.cat",
+        "name": "cat",
+        "fullName": "Cat",
+        "description": "Meow! What can I teach you?",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "pfa-explain",
+            "description": "How can I help you? I can explain your PowerFxAlpha code."
+          },
+          {
+            "name": "pfa-play",
+            "description": "Do whatever you want, I am a cat after all"
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

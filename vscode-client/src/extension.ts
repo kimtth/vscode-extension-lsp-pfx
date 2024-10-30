@@ -14,6 +14,7 @@ import {
     StreamInfo,
     TransportKind
 } from 'vscode-languageclient/node';
+import { text } from 'stream/consumers';
 
 let client: LanguageClient;
 
@@ -120,17 +121,73 @@ export function activate(context: ExtensionContext) {
     });
 
     // Register a command to send chat messages: custom command, which sends a message to the server.
-    const CHAT_MESSAGE = "chat/message";
+    // Custom command - Simple notification
+    const CHAT_REQUEST = "chat/request";
     const CHAT_RESPONSE = "chat/response";
     const sendChatCmd = vscode.commands.registerCommand('extension.sendChatMessage', async () => {
         const message = await vscode.window.showInputBox({ prompt: 'Enter your chat message' });
         if (message) {
-            client.sendNotification(CHAT_MESSAGE, { message });
+            client.sendNotification(CHAT_REQUEST, { message });
         }
     });
 
+    // Custome command - Chat
+    // --- a handler for chat -- start
+    // Register the chat participant and its request handler
+    // https://github.com/microsoft/vscode-extension-samples > chat-sample > chat-tutorial
+    const CAT_CHAT_REQUEST = "catChat/request";
+    const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
+        let prompt = 'Do whatever you want, you are a cat after all';
+        if (request.command === 'explain') {
+            prompt = 'You are a helpful code tutor. Explain selected PowerFxAlpha code to me';
+        }
+
+        // initialize the messages array with the prompt
+        const messages = [
+            vscode.LanguageModelChatMessage.User(prompt),
+        ];
+        // get all the previous participant messages
+        const previousMessages = context.history.filter(
+            (h) => h instanceof vscode.ChatResponseTurn
+        );
+
+        // add the previous messages to the messages array
+        previousMessages.forEach((m) => {
+            let fullMessage = '';
+            m.response.forEach((r) => {
+                const mdPart = r as vscode.ChatResponseMarkdownPart;
+                fullMessage += mdPart.value.value;
+            });
+            messages.push(vscode.LanguageModelChatMessage.Assistant(fullMessage));
+        });
+
+        // add in the user's message
+        messages.push(vscode.LanguageModelChatMessage.User(request.prompt));
+
+        // send the messages to the server
+        const chatResponse = await client.sendRequest(CAT_CHAT_REQUEST, { messages }) as { text: AsyncIterable<string> };
+        if (chatResponse.text) {
+            for await (const fragment of chatResponse.text) {
+                stream.markdown(fragment);
+                // Add new line after each fragment
+                stream.markdown('\n');
+            }
+        } else {
+            console.error('Response does not contain text attribute');
+        }
+
+        return;
+    };
+    const cat = vscode.chat.createChatParticipant('chat-ext.cat', handler);
+
+    // Optionally, set some properties for @cat
+    cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.png');
+
+    // Add the chat request handler here
+    // --- a handler for chat -- end
+
     // Handle responses from the server
-    const receiveChatNotification  = client.onNotification(CHAT_RESPONSE, (params) => {
+    const receiveChatNotification = client.onNotification(CHAT_RESPONSE, (params) => {
         vscode.window.showInformationMessage(params.message);
     });
     context.subscriptions.push(helloCmd, sendChatCmd, receiveChatNotification);
