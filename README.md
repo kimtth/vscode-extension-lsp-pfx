@@ -10,12 +10,12 @@
 
 ## Visual Code extension overview
 
-- VS Code <-> Type script: Extension & LSP Client (node) <-- LSP -- > Python: LSP Server (pygls) <-> Parser
+- VS Code <-> Type script: Extension & LSP Client (nodejs) <-- LSP -- > Python: LSP Server (pygls) <-> Parser
 
 ```mermaid
 sequenceDiagram
     participant VSCode as VS Code
-    participant TS as TypeScript: <br/> Extension & LSP Client (node)
+    participant TS as TypeScript: <br/> Extension & LSP Client (nodejs)
     participant Python as Python: <br/> LSP Server <br/> (pygls)
     participant Parser as Parser
 
@@ -73,7 +73,8 @@ https://github.com/user-attachments/assets/e7dc6464-c559-4d91-8498-02e11ea42cd9
 2. Rename Function: Rename function's name in the code context.  
 3. Custom Notification: Create a command for notifications through user input from client-server communication.  
 4. Client Notification: Enable the client to pop up a hello-world notification by command.  
-5. Syntax Highlighting: Implement syntax highlighting.  
+5. Syntax Highlighting: Implement syntax highlighting.
+6. Chat: A chat UI implementation that displays responses from the server.
 
 ## References
 

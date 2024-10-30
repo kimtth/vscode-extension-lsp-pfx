@@ -1,3 +1,5 @@
+from collections.abc import Iterable
+from dataclasses import dataclass
 import os
 from typing import List
 from antlr4 import *
@@ -6,12 +8,38 @@ from antlr4_parser.powerfx_alpha.PowerFxAlphaParser import PowerFxAlphaParser
 from antlr4.error.ErrorListener import ErrorListener
 
 
-class MyErrorListener(ErrorListener):
+@dataclass
+class SyntaxError:
+    line: int
+    column: int
+    msg: str
+
+
+class ExternalHandler:
     def __init__(self):
+        self.error_messages = []
+
+    def handle_syntax_error(self, line, column, msg):
+        se = SyntaxError(line, column, msg)
+        # keep last 5 messages
+        if len(self.error_messages) >= 5:
+            self.error_messages = []
+        self.error_messages.append(se)
+
+    def get_syntax_error_messages(self):
+        return self.error_messages
+
+
+class MyErrorListener(ErrorListener):
+    def __init__(self, external_handler: ExternalHandler = None):
         super(MyErrorListener, self).__init__()
+        self.external_handler = external_handler
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        print(f"Syntax error at line {line}, column {column}: {msg}")
+        if self.external_handler:
+            self.external_handler.handle_syntax_error(line, column, msg)
+        else:
+            print(f"Syntax error at line {line}, column {column}: {msg}")
 
 
 def parse_by_string(script: str):
@@ -24,7 +52,8 @@ def parse_by_string(script: str):
     parser = PowerFxAlphaParser(stream)
 
     # Add custom error listener
-    error_listener = MyErrorListener()
+    external_handler = ExternalHandler()
+    error_listener = MyErrorListener(external_handler)
     parser.removeErrorListeners()
     parser.addErrorListener(error_listener)
 
@@ -40,27 +69,32 @@ def parse_by_string(script: str):
 """
 To get the function name, we need to traverse the parse tree and look for the FunctionIdentifierContext and FunctionCallContext nodes.
 """
+
+
 def is_function_identifier(node):
     if PowerFxAlphaParser.FunctionIdentifierContext is type(node):
+
         # print(f"func-identifier: {node.getText()}")
         return True
 
     if PowerFxAlphaParser.FunctionCallContext is type(node):
         # print(f"func-call: {node.getText()}")
         return True
-    
+
     return False
 
 
 def traverse_tree(node, func_nodes: List):
     # Recursively traverse the children of the current node
     if hasattr(node, "children"):
-        for child in node.children:
-            traverse_tree(child, func_nodes)
-            if is_function_identifier(child):
-                func_nodes.append(child)
-            else:
-                continue
+        # check is iterable
+        if isinstance(node.children, Iterable):
+            for child in node.children:
+                traverse_tree(child, func_nodes)
+                if is_function_identifier(child):
+                    func_nodes.append(child)
+                else:
+                    continue
 
     return func_nodes
 
